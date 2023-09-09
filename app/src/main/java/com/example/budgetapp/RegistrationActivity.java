@@ -35,6 +35,15 @@ public class RegistrationActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         registerbtn = findViewById(R.id.registerbtn);
         registerqn = findViewById(R.id.registerqn);
+
+        // Initialize FirebaseAuth instance
+        mAuth = FirebaseAuth.getInstance();
+
+        // Initialize progressDialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Registration in Progress");
+        progressDialog.setCanceledOnTouchOutside(false);
+
         registerqn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,30 +58,27 @@ public class RegistrationActivity extends AppCompatActivity {
                 String emailString = email.getText().toString();
                 String passwordString = password.getText().toString();
 
-
-                if(TextUtils.isEmpty(emailString)){
+                if (TextUtils.isEmpty(emailString)) {
                     email.setError("Email is Required !!");
-                }
-                if(TextUtils.isEmpty(passwordString)) {
-                    email.setError("Password is Required !!");
-                }
-                else{
-                    progressDialog.setMessage("Registration in Progress");
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.show();
-                    mAuth.createUserWithEmailAndPassword(emailString,passwordString).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else if (TextUtils.isEmpty(passwordString)) {
+                    // Change this to set an error for the password field
+                    password.setError("Password is Required !!");
+                } else {
+                    progressDialog.show(); // Show the progressDialog
+
+                    mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                Intent intent=new Intent(RegistrationActivity.this,MainActivity.class);
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
-                                progressDialog.dismiss();
+                            } else {
+                                Toast.makeText(RegistrationActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                             }
-                            else {
-                                Toast.makeText(RegistrationActivity.this,task.getException().toString(), Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
+
+                            // Dismiss the progressDialog in both success and failure cases
+                            progressDialog.dismiss();
                         }
                     });
                 }

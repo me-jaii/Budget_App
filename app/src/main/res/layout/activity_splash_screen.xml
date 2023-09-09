@@ -26,6 +26,14 @@
         android:textSize="15sp"
         android:layout_marginTop="10sp"
         android:textStyle="bold" />
-
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dcs"
+        android:autoSizeMaxTextSize="@dimen/cardview_compat_inset_shadow"
+        android:text="Developed by DCS X GDSC"
+        android:textAppearance="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_marginTop="5sp" />
 </LinearLayout>
